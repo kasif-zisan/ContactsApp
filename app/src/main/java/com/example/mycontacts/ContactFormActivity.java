@@ -1,6 +1,7 @@
 package com.example.mycontacts;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -105,6 +106,8 @@ public class ContactFormActivity extends AppCompatActivity {
             Toast.makeText(this, "Error saving contact", Toast.LENGTH_SHORT).show();
         }
 
+        Intent i = new Intent(ContactFormActivity.this, ContactListActivity.class);
+        startActivity(i);
         finish();
     }
 

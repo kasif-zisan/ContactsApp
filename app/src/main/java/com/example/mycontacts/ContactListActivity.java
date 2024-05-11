@@ -3,9 +3,13 @@ package com.example.mycontacts;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,11 +21,13 @@ public class ContactListActivity extends AppCompatActivity {
     private ListView lvContactList;
     private CustomListAdapter clAdapter;
     private Button btnExit, btnAdd;
-
+    private ContactsDB db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
+
+        db = new ContactsDB(this);
 
         lvContactList = findViewById(R.id.ListView);
         btnAdd = findViewById(R.id.btnAdd);
@@ -39,6 +45,7 @@ public class ContactListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ContactListActivity.this, ContactFormActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -46,6 +53,43 @@ public class ContactListActivity extends AppCompatActivity {
         clAdapter = new CustomListAdapter(this, contacts);
         lvContactList.setAdapter(clAdapter);
         loadContacts();
+
+        lvContactList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                PopupMenu popup = new PopupMenu(ContactListActivity.this, view);
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Contact contact = contacts.get(position);
+                        if (item.getItemId() == R.id.update) {
+                            // Call your method to update contact
+                            int updateResult = db.updateContact(contact.Name, contact.Email, contact.Phone1, contact.Phone2, contact.Photo);
+                            if (updateResult > 0) {
+                                Toast.makeText(ContactListActivity.this, "Contact updated successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ContactListActivity.this, "Error updating contact", Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+                        } else if (item.getItemId() == R.id.delete) {
+                            // Call your method to delete contact
+                            int deleteResult = db.deleteContact(contact.Name);
+                            if (deleteResult > 0) {
+                                Toast.makeText(ContactListActivity.this, "Contact deleted successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ContactListActivity.this, "Error deleting contact", Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                });
+
+                popup.show(); // showing popup menu
+                return true; // return true to indicate that we've consumed the long click event
+            }
+        });
 
     }
 
