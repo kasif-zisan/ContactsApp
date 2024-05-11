@@ -31,18 +31,12 @@ public class CustomListAdapter extends ArrayAdapter<Contact> {
 
         View rowView = inflater.inflate(R.layout.row_contact_item, parent, false);
 
-        ImageView image = rowView.findViewById(R.id.imageView2);
         TextView tvContactName = rowView.findViewById(R.id.textView2);
         TextView tvContactEmail = rowView.findViewById(R.id.textView3);
 
         Contact e = values.get(position);
         tvContactName.setText(e.Name);
         tvContactEmail.setText(e.Email);
-
-        String photo = e.Photo; // This is your base64 string
-        byte[] decodedString = Base64.decode(photo, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        image.setImageBitmap(decodedByte);
 
         return rowView;
     }

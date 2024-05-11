@@ -50,9 +50,10 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
     private void loadContacts() {
-        String q = "SELECT * FROM contacts";
+
+        String q = "SELECT * FROM contacts;";
         ContactsDB db = new ContactsDB(this);
-        Cursor cursor = db.selectContact(q);
+        Cursor cursor = db.selectAllContacts(q);
         contacts.clear();
         if (cursor != null && cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -61,7 +62,6 @@ public class ContactListActivity extends AppCompatActivity {
                 String Phone1 = cursor.getString(2);
                 String Phone2 = cursor.getString(3);
                 String Photo = cursor.getString(4);
-
                 Contact c = new Contact(Name, Email, Phone1, Phone2, Photo);
                 contacts.add(c);
             }

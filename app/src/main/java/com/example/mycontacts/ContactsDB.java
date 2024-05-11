@@ -74,4 +74,15 @@ public class ContactsDB extends SQLiteOpenHelper {
         }
         return cur;
     }
+
+    public Cursor selectAllContacts(String query) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(query, null);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return cursor;
+    }
 }

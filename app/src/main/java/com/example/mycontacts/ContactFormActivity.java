@@ -38,7 +38,7 @@ public class ContactFormActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
 
         img1 = findViewById(R.id.imageView);
-        img1.setImageResource(R.drawable.profile);
+
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
