@@ -31,7 +31,7 @@ public class ContactsDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertContact(String name, String email, String phone1, String phone2, String photo) {
+    public long insertContact(String name, String email, String phone1, String phone2, String photo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cols = new ContentValues();
         cols.put("Name", name);
@@ -39,25 +39,29 @@ public class ContactsDB extends SQLiteOpenHelper {
         cols.put("Phone1", phone1);
         cols.put("Phone2", phone2);
         cols.put("Photo", photo);
+        long result = db.insert("contacts", null ,  cols);
         db.insert("contacts", null ,  cols);
         db.close();
+        return result;
     }
 
-    public void updateContact(String name, String email, String phone1, String phone2, String photo) {
+    public int updateContact(String name, String email, String phone1, String phone2, String photo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cols = new ContentValues();
         cols.put("Email", email);
         cols.put("Phone1", phone1);
         cols.put("Phone2", phone2);
         cols.put("Photo", photo);
-        db.update("contacts", cols, "Name=?", new String[ ] {name} );
+        int result = db.update("contacts", cols, "Name=?", new String[ ] {name} );
         db.close();
+        return result;
     }
 
-    public void deleteContact(String name) {
+    public int deleteContact(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("contacts", "Name=?", new String[ ] {name} );
+        int result = db.delete("contacts", "Name=?", new String[ ] {name} );
         db.close();
+        return result;
     }
 
     public Cursor selectContact(String name) {

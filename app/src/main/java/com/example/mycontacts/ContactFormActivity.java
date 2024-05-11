@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -96,7 +97,13 @@ public class ContactFormActivity extends AppCompatActivity {
         String photo = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         ContactsDB dbHelper = new ContactsDB(this);
-        dbHelper.insertContact(name, email, phone1, phone2, photo);
+        long result = dbHelper.insertContact(name, email, phone1, phone2, photo);
+
+        if (result != -1) {
+            Toast.makeText(this, "Contact saved successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error saving contact", Toast.LENGTH_SHORT).show();
+        }
 
         finish();
     }
