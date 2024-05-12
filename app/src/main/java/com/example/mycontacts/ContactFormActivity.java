@@ -2,6 +2,7 @@ package com.example.mycontacts;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class ContactFormActivity extends AppCompatActivity {
     private EditText etName, etEmail, etPhone1, etPhone2;
     private Button btnCancel, btnSave;
     private ImageView img1;
+    private String Name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,26 @@ public class ContactFormActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
 
         img1 = findViewById(R.id.imageView);
+
+        if (getIntent().hasExtra("Name")) {
+            Name = getIntent().getStringExtra("Name");
+            etName.setText(Name);
+        }
+
+        if (getIntent().hasExtra("Email")) {
+            String name = getIntent().getStringExtra("Email");
+            etEmail.setText(name);
+        }
+
+        if (getIntent().hasExtra("Phone1")) {
+            String name = getIntent().getStringExtra("Phone1");
+            etPhone1.setText(name);
+        }
+
+        if (getIntent().hasExtra("Phone2")) {
+            String name = getIntent().getStringExtra("Phone2");
+            etPhone2.setText(name);
+        }
 
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -98,12 +120,22 @@ public class ContactFormActivity extends AppCompatActivity {
         String photo = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         ContactsDB dbHelper = new ContactsDB(this);
-        long result = dbHelper.insertContact(name, email, phone1, phone2, photo);
+        Cursor cursor = dbHelper.selectContact(Name);
 
-        if (result != -1) {
-            Toast.makeText(this, "Contact saved successfully", Toast.LENGTH_SHORT).show();
+        if (cursor != null && cursor.getCount() > 0) {
+            int updateResult = dbHelper.updateContact(Name, name, email, phone1, phone2, photo);
+            if (updateResult > 0) {
+                Toast.makeText(this, "Contact updated successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error updating contact", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, "Error saving contact", Toast.LENGTH_SHORT).show();
+            long insertResult = dbHelper.insertContact(name, email, phone1, phone2, photo);
+            if (insertResult != -1) {
+                Toast.makeText(this, "Contact saved successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error saving contact", Toast.LENGTH_SHORT).show();
+            }
         }
 
         Intent i = new Intent(ContactFormActivity.this, ContactListActivity.class);

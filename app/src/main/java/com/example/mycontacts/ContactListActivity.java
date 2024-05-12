@@ -63,15 +63,15 @@ public class ContactListActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         Contact contact = contacts.get(position);
                         if (item.getItemId() == R.id.update) {
-                            // Call your method to update contact
-                            int updateResult = db.updateContact(contact.Name, contact.Email, contact.Phone1, contact.Phone2, contact.Photo);
-                            if (updateResult > 0) {
-                                Toast.makeText(ContactListActivity.this, "Contact updated successfully", Toast.LENGTH_SHORT).show();
-                                recreate();
-                            } else {
-                                Toast.makeText(ContactListActivity.this, "Error updating contact", Toast.LENGTH_SHORT).show();
-                            }
+                            Intent intent = new Intent(ContactListActivity.this, ContactFormActivity.class);
+                            intent.putExtra("Name", contact.Name);
+                            intent.putExtra("Email", contact.Email);
+                            intent.putExtra("Phone1", contact.Phone1);
+                            intent.putExtra("Phone2", contact.Phone2);
+                            startActivity(intent);
+                            finish();
                             return true;
+
                         } else if (item.getItemId() == R.id.delete) {
                             // Call your method to delete contact
                             int deleteResult = db.deleteContact(contact.Name);

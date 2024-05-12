@@ -44,14 +44,15 @@ public class ContactsDB extends SQLiteOpenHelper {
         return result;
     }
 
-    public int updateContact(String name, String email, String phone1, String phone2, String photo) {
+    public int updateContact(String oldName, String newName, String email, String phone1, String phone2, String photo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cols = new ContentValues();
+        cols.put("Name", newName);
         cols.put("Email", email);
         cols.put("Phone1", phone1);
         cols.put("Phone2", phone2);
         cols.put("Photo", photo);
-        int result = db.update("contacts", cols, "Name=?", new String[ ] {name} );
+        int result = db.update("contacts", cols, "Name=?", new String[ ] {oldName} );
         db.close();
         return result;
     }
