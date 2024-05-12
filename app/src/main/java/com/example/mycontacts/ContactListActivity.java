@@ -67,6 +67,7 @@ public class ContactListActivity extends AppCompatActivity {
                             int updateResult = db.updateContact(contact.Name, contact.Email, contact.Phone1, contact.Phone2, contact.Photo);
                             if (updateResult > 0) {
                                 Toast.makeText(ContactListActivity.this, "Contact updated successfully", Toast.LENGTH_SHORT).show();
+                                recreate();
                             } else {
                                 Toast.makeText(ContactListActivity.this, "Error updating contact", Toast.LENGTH_SHORT).show();
                             }
@@ -76,6 +77,7 @@ public class ContactListActivity extends AppCompatActivity {
                             int deleteResult = db.deleteContact(contact.Name);
                             if (deleteResult > 0) {
                                 Toast.makeText(ContactListActivity.this, "Contact deleted successfully", Toast.LENGTH_SHORT).show();
+                                recreate();
                             } else {
                                 Toast.makeText(ContactListActivity.this, "Error deleting contact", Toast.LENGTH_SHORT).show();
                             }

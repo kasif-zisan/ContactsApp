@@ -40,7 +40,6 @@ public class ContactsDB extends SQLiteOpenHelper {
         cols.put("Phone2", phone2);
         cols.put("Photo", photo);
         long result = db.insert("contacts", null ,  cols);
-        db.insert("contacts", null ,  cols);
         db.close();
         return result;
     }
